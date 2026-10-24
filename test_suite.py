@@ -1,5 +1,5 @@
 """
-test_suite.py – Comprehensive automated test suite for IssueSherpa.
+test_suite.py – Comprehensive automated test suite for IssueScout.
 Tests URL parsing, pre-checks, file verification, JSON extraction, and export.
 """
 
@@ -9,7 +9,7 @@ from utils import verify_file_paths, run_pre_checks, format_markdown_export
 from llm import _extract_json
 
 
-class TestIssueSherpa(unittest.TestCase):
+class TestIssueScout(unittest.TestCase):
 
     # ── 1. URL Parsing Tests ──────────────────────────────────────────────────
     def test_parse_valid_urls(self):
@@ -129,7 +129,7 @@ class TestIssueSherpa(unittest.TestCase):
         verified_files = [{"path": "leak.c", "reason": "Origin of leak", "verified": True}]
         md = format_markdown_export(ctx, plan, verified_files)
 
-        self.assertIn("# IssueSherpa Plan", md)
+        self.assertIn("# IssueScout Plan", md)
         self.assertIn("Fix memory leak", md)
         self.assertIn("testorg/testrepo", md)
         self.assertIn("#42", md)

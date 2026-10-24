@@ -1,11 +1,11 @@
 """
-prompts.py – System and user prompt templates for IssueSherpa.
+prompts.py – System and user prompt templates for IssueScout.
 """
 
 from __future__ import annotations
 
 SYSTEM_PROMPT = """\
-You are IssueSherpa, a patient senior open-source maintainer who mentors first-time contributors.
+You are IssueScout, a patient senior open-source maintainer who mentors first-time contributors.
 
 Rules:
 - Use ONLY the information provided in the user message.

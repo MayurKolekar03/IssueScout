@@ -55,7 +55,7 @@ def parse_issue_url(url: str) -> tuple[str, str, int]:
 
 def fetch_issue_context(owner: str, repo: str, issue_number: int) -> dict:
     """
-    Fetch everything IssueSherpa needs:
+    Fetch everything IssueScout needs:
       - Issue metadata + first 10 comments
       - README (truncated)
       - CONTRIBUTING.md (truncated)

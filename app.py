@@ -1,5 +1,5 @@
 """
-app.py – IssueSherpa: Turn any GitHub issue into a clear plan to contribute.
+app.py – IssueScout: Turn any GitHub issue into a clear plan to contribute.
 Aesthetic, mobile-friendly redesign with responsive CSS, intuitive guidance,
 and real-time validation.
 """
@@ -23,8 +23,8 @@ from utils import format_markdown_export, run_pre_checks, verify_file_paths
 
 # ── Page config ────────────────────────────────────────────────────────────────
 st.set_page_config(
-    page_title="IssueSherpa 🧗 - Open Source AI Mentor",
-    page_icon="🧗",
+    page_title="IssueScout 🧭 - Open Source AI Mentor",
+    page_icon="🧭",
     layout="wide",
     initial_sidebar_state="collapsed",
 )
@@ -116,7 +116,7 @@ html, body, [class*="css"] {
     margin-bottom: 1.5rem;
 }
 .sherpa-hero::after {
-    content: "🧗";
+    content: "🧭";
     position: absolute;
     right: 1.5rem;
     bottom: -0.5rem;
@@ -492,10 +492,10 @@ with st.sidebar:
     </div>
     """, unsafe_allow_html=True)
 
-    st.markdown("### 🧗 3-Step Guide")
+    st.markdown("### 🧭 3-Step Guide")
     st.markdown("""
     1. **Find an open issue** on GitHub (filter by `good first issue`).
-    2. **Paste the URL** into IssueSherpa.
+    2. **Paste the URL** into IssueScout.
     3. **Get your custom roadmap**, checklist, and draft pull request.
     """)
 
@@ -513,7 +513,7 @@ with st.sidebar:
 st.markdown("""
 <div class="sherpa-hero">
   <div class="hero-badge">🎃 Open Source &amp; Hacktoberfest Mentor</div>
-  <h1 class="hero-title">IssueSherpa 🧗</h1>
+  <h1 class="hero-title">IssueScout 🧭</h1>
   <p class="hero-subtitle">
     Turn any GitHub issue into a beginner-friendly, step-by-step contribution plan in seconds.
   </p>
@@ -528,7 +528,7 @@ st.markdown("""
     <span>📌 How to input a GitHub Issue URL</span>
   </div>
   <p style="font-size:0.86rem;color:#475569;margin:0 0 0.5rem 0;line-height:1.5;">
-    IssueSherpa analyzes a <strong>specific task or bug</strong>, so it needs a link directly to an <strong>Issue</strong>, not just a repository home page.
+    IssueScout analyzes a <strong>specific task or bug</strong>, so it needs a link directly to an <strong>Issue</strong>, not just a repository home page.
   </p>
 
   <div class="url-anatomy">
@@ -880,7 +880,7 @@ if analyze_btn:
         st.download_button(
             label="📥 Download Plan (.md)",
             data=md_content,
-            file_name=f"IssueSherpa_{owner}_{repo}_{issue_number}.md",
+            file_name=f"IssueScout_{owner}_{repo}_{issue_number}.md",
             mime="text/markdown",
             use_container_width=True,
         )
@@ -894,12 +894,12 @@ else:
     # ── Clean Default Landing Card ─────────────────────────────────────────────
     st.markdown("""
     <div style="background:#ffffff;border-radius:18px;border:1px solid #e2e8f0;padding:2.5rem 1.5rem;text-align:center;box-shadow:0 8px 30px rgba(0,0,0,0.03);margin-top:1rem;">
-      <div style="font-size:3.5rem;margin-bottom:0.8rem;">🏔️</div>
+      <div style="font-size:3.5rem;margin-bottom:0.8rem;">🧭</div>
       <h3 style="font-size:1.35rem;font-weight:800;color:#0f172a;margin-bottom:0.4rem;">
         Your Open-Source Contribution Guide
       </h3>
       <p style="font-size:0.92rem;color:#64748b;max-width:560px;margin:0 auto 1.5rem auto;line-height:1.6;">
-        Paste any public GitHub issue URL above or click one of the quick test buttons to see how IssueSherpa breaks down complex tasks into beginner-friendly milestones.
+        Paste any public GitHub issue URL above or click one of the quick test buttons to see how IssueScout breaks down complex tasks into beginner-friendly milestones.
       </p>
       <div style="display:inline-flex;flex-wrap:wrap;gap:0.75rem;justify-content:center;font-size:0.82rem;font-weight:600;color:#4f46e5;">
         <span style="background:#f1f5f9;padding:0.35rem 0.75rem;border-radius:9999px;">⚡ Instant Pre-checks</span>
