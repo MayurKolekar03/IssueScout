@@ -1,4 +1,4 @@
-# IssueScout 🧭
+# IssueScout 🧭.
 
 > **Turn any GitHub issue into a clear, beginner-friendly action plan — powered by an open-weight LLM.**
 
