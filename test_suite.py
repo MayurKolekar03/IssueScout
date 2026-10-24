@@ -136,6 +136,35 @@ class TestIssueScout(unittest.TestCase):
         self.assertIn("leak.c", md)
         self.assertIn("I'd like to take this.", md)
 
+    def test_pdf_export(self):
+        from utils import generate_pdf_export
+        ctx = {
+            "owner": "testorg",
+            "repo": "testrepo",
+            "issue_number": 42,
+            "title": "Fix memory leak",
+            "state": "open",
+            "html_url": "https://github.com/testorg/testrepo/issues/42",
+        }
+        plan = {
+            "difficulty": "Intermediate",
+            "estimated_time": "2 hours",
+            "summary": "Fix buffer allocation leak.",
+            "steps": ["Step 1", "Step 2"],
+            "contributing_checklist": ["Run tests"],
+            "claim_comment": "I'd like to take this.",
+            "pr_title": "fix: resolve memory leak #42",
+            "pr_description": "Fixes #42",
+            "questions_to_ask_maintainer": ["Which branch?"],
+        }
+        verified_files = [{"path": "leak.c", "reason": "Origin of leak", "verified": True}]
+        pdf_bytes = generate_pdf_export(ctx, plan, verified_files)
+
+        self.assertIsInstance(pdf_bytes, bytes)
+        self.assertTrue(len(pdf_bytes) > 500)
+        # PDF files always start with %PDF
+        self.assertTrue(pdf_bytes.startswith(b"%PDF"))
+
 
 if __name__ == "__main__":
     unittest.main()

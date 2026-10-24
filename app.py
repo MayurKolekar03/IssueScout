@@ -19,7 +19,7 @@ load_dotenv(override=True)
 
 from github_client import fetch_issue_context, parse_issue_url
 from llm import LLM_MODEL, get_issue_plan
-from utils import format_markdown_export, run_pre_checks, verify_file_paths
+from utils import format_markdown_export, generate_pdf_export, run_pre_checks, verify_file_paths
 
 # ── Page config ────────────────────────────────────────────────────────────────
 st.set_page_config(
@@ -561,6 +561,8 @@ st.markdown("""
 # Session state initialization
 if "issue_url" not in st.session_state:
     st.session_state.issue_url = ""
+if "analyzed_data" not in st.session_state:
+    st.session_state.analyzed_data = None
 
 # ── 1-Click Example Issues ──────────────────────────────────────────────────────
 st.markdown('<div style="font-size:0.82rem;font-weight:700;color:#64748b;margin-bottom:0.4rem;text-transform:uppercase;">⚡ Quick test with popular repos:</div>', unsafe_allow_html=True)
@@ -570,18 +572,21 @@ with ex_cols[0]:
     if st.button("🐍 Python Algorithms #10017", use_container_width=True):
         st.session_state.issue_url = "https://github.com/the-algorithms/python/issues/10017"
         st.session_state.url_text_input = "https://github.com/the-algorithms/python/issues/10017"
+        st.session_state.analyzed_data = None
         st.rerun()
 
 with ex_cols[1]:
     if st.button("🌐 Requests Library #6523", use_container_width=True):
         st.session_state.issue_url = "https://github.com/psf/requests/issues/6523"
         st.session_state.url_text_input = "https://github.com/psf/requests/issues/6523"
+        st.session_state.analyzed_data = None
         st.rerun()
 
 with ex_cols[2]:
     if st.button("📚 Public APIs #4666", use_container_width=True):
         st.session_state.issue_url = "https://github.com/public-apis/public-apis/issues/4666"
         st.session_state.url_text_input = "https://github.com/public-apis/public-apis/issues/4666"
+        st.session_state.analyzed_data = None
         st.rerun()
 
 
@@ -676,6 +681,28 @@ if analyze_btn:
     # Anti-hallucination file path check
     verified_files = verify_file_paths(plan.get("likely_files", []), ctx.get("file_tree", []))
     prog_placeholder.empty()
+
+    # Save to session_state so interaction or downloads never discard the result!
+    st.session_state.analyzed_data = {
+        "owner": owner,
+        "repo": repo,
+        "issue_number": issue_number,
+        "ctx": ctx,
+        "plan": plan,
+        "verified_files": verified_files,
+        "checks": checks,
+    }
+
+# ── Render Analysis Results ──────────────────────────────────────────────────────
+if st.session_state.get("analyzed_data"):
+    data = st.session_state.analyzed_data
+    owner = data["owner"]
+    repo = data["repo"]
+    issue_number = data["issue_number"]
+    ctx = data["ctx"]
+    plan = data["plan"]
+    verified_files = data["verified_files"]
+    checks = data["checks"]
 
     # ── Repo Overview Header ────────────────────────────────────────────────────
     rs = ctx.get("repo_stats", {})
@@ -874,11 +901,20 @@ if analyze_btn:
 
     # ── Export & Reset Action Bar ───────────────────────────────────────────────
     st.markdown("<hr style='border:none;border-top:1px solid #e2e8f0;margin:2rem 0 1rem 0;'>", unsafe_allow_html=True)
-    down_col, reset_col = st.columns(2)
-    with down_col:
+    pdf_col, md_col, reset_col = st.columns([1.2, 1, 1])
+    with pdf_col:
+        pdf_bytes = generate_pdf_export(ctx, plan, verified_files)
+        st.download_button(
+            label="📥 Download PDF Roadmap",
+            data=pdf_bytes,
+            file_name=f"IssueScout_{owner}_{repo}_{issue_number}.pdf",
+            mime="application/pdf",
+            use_container_width=True,
+        )
+    with md_col:
         md_content = format_markdown_export(ctx, plan, verified_files)
         st.download_button(
-            label="📥 Download Plan (.md)",
+            label="📄 Download Markdown (.md)",
             data=md_content,
             file_name=f"IssueScout_{owner}_{repo}_{issue_number}.md",
             mime="text/markdown",
@@ -886,6 +922,7 @@ if analyze_btn:
         )
     with reset_col:
         if st.button("🔄 Analyse Another Issue", use_container_width=True):
+            st.session_state.analyzed_data = None
             st.session_state.issue_url = ""
             st.session_state.url_text_input = ""
             st.rerun()
